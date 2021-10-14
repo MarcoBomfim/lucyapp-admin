@@ -23,7 +23,6 @@
           </template>
 
           <template v-slot:right>
-            <!-- <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" /> -->
             <Button
               label="Exportar para .CSV"
               icon="pi pi-upload"
@@ -80,48 +79,6 @@
               {{slotProps.data.name}}
             </template>
           </Column>
-          <!-- <Column field="description" header="Descrição" :sortable="false">
-						<template #body="slotProps">
-							<span class="p-column-title">Name</span>
-							{{slotProps.data.description}}
-						</template>
-					</Column> -->
-          <!-- <Column field="stages" header="Etapas da fase" :sortable="false">
-						<template #body="slotProps">
-							<span class="p-column-title">Name</span>
-							{{ slotProps.data.stages || []}}
-						</template>
-					</Column> -->
-          <!-- <Column header="Image">
-						<template #body="slotProps">
-							<span class="p-column-title">Image</span>
-							<img :src="'images/level/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
-						</template>
-					</Column> -->
-          <!-- <Column field="price" header="Price" :sortable="true">
-						<template #body="slotProps">
-							<span class="p-column-title">Price</span>
-							{{formatCurrency(slotProps.data.price)}}
-						</template>
-					</Column> -->
-          <!-- <Column field="category" header="Category" :sortable="true">
-						<template #body="slotProps">
-							<span class="p-column-title">Category</span>
-							{{formatCurrency(slotProps.data.category)}}
-						</template>
-					</Column> -->
-          <!-- <Column field="rating" header="Reviews" :sortable="true">
-						<template #body="slotProps">
-							<span class="p-column-title">Rating</span>
-							<Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
-						</template>
-					</Column> -->
-          <!-- <Column field="inventoryStatus" header="Status" :sortable="true">
-						<template #body="slotProps">
-							<span class="p-column-title">Status</span>
-							<span :class="'level-badge status-' + (slotProps.data.inventoryStatus ? slotProps.data.inventoryStatus.toLowerCase() : '')">{{slotProps.data.inventoryStatus}}</span>
-						</template>
-					</Column> -->
           <Column>
             <template #body="slotProps">
               <Button
@@ -145,7 +102,6 @@
           :modal="true"
           class="p-fluid"
         >
-          <!-- <img :src="'images/level/' + level.image" :alt="level.image" v-if="level.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" /> -->
           <div class="field">
             <label for="name">Nome</label>
             <InputText
@@ -171,55 +127,6 @@
             />
           </div>
 
-          <!-- <div class="field">
-						<label for="inventoryStatus" class="mb-3">Inventory Status</label>
-						<Dropdown id="inventoryStatus" v-model="level.inventoryStatus" :options="statuses" optionLabel="label" placeholder="Select a Status">
-							<template #value="slotProps">
-								<div v-if="slotProps.value && slotProps.value.value">
-									<span :class="'level-badge status-' +slotProps.value.value">{{slotProps.value.label}}</span>
-								</div>
-								<div v-else-if="slotProps.value && !slotProps.value.value">
-									<span :class="'level-badge status-' +slotProps.value.toLowerCase()">{{slotProps.value}}</span>
-								</div>
-								<span v-else>
-									{{slotProps.placeholder}}
-								</span>
-							</template>
-						</Dropdown>
-					</div> -->
-
-          <!-- <div class="field">
-						<label class="mb-3">Category</label>
-						<div class="formgrid grid">
-							<div class="field-radiobutton col-6">
-								<RadioButton id="category1" name="category" value="Accessories" v-model="level.category" />
-								<label for="category1">Accessories</label>
-							</div>
-							<div class="field-radiobutton col-6">
-								<RadioButton id="category2" name="category" value="Clothing" v-model="level.category" />
-								<label for="category2">Clothing</label>
-							</div>
-							<div class="field-radiobutton col-6">
-								<RadioButton id="category3" name="category" value="Electronics" v-model="level.category" />
-								<label for="category3">Electronics</label>
-							</div>
-							<div class="field-radiobutton col-6">
-								<RadioButton id="category4" name="category" value="Fitness" v-model="level.category" />
-								<label for="category4">Fitness</label>
-							</div>
-						</div>
-					</div> -->
-
-          <!-- <div class="formgrid grid">
-						<div class="field col">
-							<label for="price">Price</label>
-							<InputNumber id="price" v-model="level.price" mode="currency" currency="USD" locale="en-US" />
-						</div>
-						<div class="field col">
-							<label for="quantity">Quantity</label>
-							<InputNumber id="quantity" v-model="level.quantity" integeronly />
-						</div>
-					</div> -->
           <template #footer>
             <Button
               label="Cancelar"
