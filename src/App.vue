@@ -26,6 +26,7 @@
 
 <script>
 import AppTopBar from "./components/AppTopBar.vue";
+import AppConfig from "./components/AppConfig.vue"
 import AppMenu from "./components/AppMenu.vue";
 
 export default {
@@ -53,7 +54,7 @@ export default {
       ]
     };
   },
-  components: { AppTopBar, AppMenu },
+  components: { 'AppTopBar': AppTopBar, 'AppMenu': AppMenu, 'AppConfig': AppConfig },
   methods: {
     onWrapperClick() {
       if (!this.menuClick) {
@@ -87,7 +88,13 @@ export default {
         this.overlayMenuActive = false;
         this.mobileMenuActive = false;
       }
-    }
+    },
+		onLayoutChange(layoutMode) {
+			this.layoutMode = layoutMode;
+		},
+		onLayoutColorChange(layoutColorMode) {
+			this.layoutColorMode = layoutColorMode;
+		},
   },
   computed: {
     containerClass() {

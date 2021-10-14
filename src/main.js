@@ -19,12 +19,14 @@ import Dropdown from 'primevue/dropdown';
 import FileUpload from 'primevue/fileupload';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
+import InputSwitch from 'primevue/inputswitch';
 import RadioButton from 'primevue/radiobutton';
 import Rating from 'primevue/rating';
 import Ripple from 'primevue/ripple';
 import StyleClass from 'primevue/styleclass';
 import TextArea from 'primevue/textarea';
 import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
 import Toolbar from 'primevue/toolbar';
 
 const app = createApp(App)
@@ -34,6 +36,7 @@ app.use(store)
 
 app.config.globalProperties.$appState = reactive({ theme: 'saga-blue' });
 app.use(PrimeVue, { ripple: true, inputStyle: 'outlined' })
+app.use(ToastService);
 
 app.component('Button', Button);
 app.component('Column', Column);
@@ -44,6 +47,7 @@ app.component('Dropdown', Dropdown);
 app.component('FileUpload', FileUpload);
 app.component('InputText', InputText);
 app.component('InputNumber', InputNumber);
+app.component('InputSwitch', InputSwitch);
 app.component('RadioButton', RadioButton);
 app.component('Rating', Rating);
 app.component('Textarea', TextArea);
