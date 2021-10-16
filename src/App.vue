@@ -15,7 +15,7 @@
       />
     </div>
 
-		<AppConfig :layoutMode="layoutMode" :layoutColorMode="layoutColorMode" @layout-change="onLayoutChange" @layout-color-change="onLayoutColorChange" />
+		<AppConfig v-show="false" :layoutMode="layoutMode" :layoutColorMode="layoutColorMode" @layout-change="onLayoutChange" @layout-color-change="onLayoutColorChange" />
     <div class="layout-main-container">
         <div class="layout-main">
             <router-view />

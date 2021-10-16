@@ -79,6 +79,16 @@
               {{slotProps.data.name}}
             </template>
           </Column>
+          <Column
+            field="description"
+            header="Descrição"
+            :sortable="true"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Descrição</span>
+              {{slotProps.data.description}}
+            </template>
+          </Column>
           <Column>
             <template #body="slotProps">
               <Button

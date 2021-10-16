@@ -82,6 +82,16 @@
               {{slotProps.data.name}}
             </template>
           </Column>
+          <Column
+            field="description"
+            header="Descrição"
+            :sortable="true"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Descrição</span>
+              {{slotProps.data.description}}
+            </template>
+          </Column>
           <Column>
             <template #body="slotProps">
               <Button
@@ -239,9 +249,8 @@ export default {
   async mounted() {
     const stagesResponse = await http.get("/stages");
     const levelsResponse = await http.get("/levels");
-    this.stages = stagesResponse.data;
 
-    console.log(levelsResponse);
+    this.stages = stagesResponse.data;
     this.levels = levelsResponse.data;
   },
   methods: {
@@ -259,7 +268,8 @@ export default {
       if (this.stage.name.trim()) {
         if (this.stage._id) {
           await http.post(`/stages/${this.stage._id}`, {
-            ...this.stage
+            ...this.stage,
+            level: this.selectedLevel
           });
 
           const { data } = await http.get("/stages");
@@ -274,7 +284,8 @@ export default {
           this.hideDialog();
         } else {
           await http.post(`/stages`, {
-            ...this.stage
+            ...this.stage,
+            level: this.selectedLevel
           });
 
           const { data } = await http.get("/stages");
