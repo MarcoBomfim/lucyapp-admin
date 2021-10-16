@@ -47,7 +47,7 @@
         >
           <template #header>
             <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-              <h5 class="m-0">Fases</h5>
+              <h5 class="m-0">Exercícios</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -111,7 +111,7 @@
         <Dialog
           v-model:visible="exerciseDialog"
           :style="{width: '450px'}"
-          header="Detalhes da Fase"
+          header="Detalhes da Exercício"
           :modal="true"
           class="p-fluid"
         >   
@@ -191,7 +191,7 @@
               class="pi pi-exclamation-triangle mr-3"
               style="font-size: 2rem"
             />
-            <span v-if="exercise"> Você tem certeza que deseja deletar a fase <b>{{exercise.name}}</b>?</span>
+            <span v-if="exercise"> Você tem certeza que deseja deletar a exercício <b>{{exercise.name}}</b>?</span>
           </div>
           <template #footer>
             <Button
@@ -220,7 +220,7 @@
               class="pi pi-exclamation-triangle mr-3"
               style="font-size: 2rem"
             />
-            <span v-if="exercise"> Você tem certeza que deseja deletar essas fases?</span>
+            <span v-if="exercise"> Você tem certeza que deseja deletar essas exercícios?</span>
           </div>
           <template #footer>
             <Button
@@ -311,7 +311,7 @@ export default {
           this.$toast.add({
             severity: "success",
             summary: "Tudo certo!",
-            detail: "Fase atualizada",
+            detail: "Exercício atualizada",
             life: 3000
           });
           this.hideDialog();
@@ -327,7 +327,7 @@ export default {
           this.$toast.add({
             severity: "success",
             summary: "Tudo certo!",
-            detail: "Fase criada",
+            detail: "Exercício criada",
             life: 3000
           });
         }
@@ -349,7 +349,7 @@ export default {
       this.$toast.add({
         severity: "success",
         summary: "Sucesso",
-        detail: "Fase Deletada",
+        detail: "Exercício Deletada",
         life: 3000
       });
 
@@ -382,7 +382,7 @@ export default {
       this.$toast.add({
         severity: "success",
         summary: "Successful",
-        detail: "Fases Deletadas",
+        detail: "Exercícios Deletadas",
         life: 3000
       });
 

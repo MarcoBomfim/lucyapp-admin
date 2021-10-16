@@ -47,7 +47,7 @@
         >
           <template #header>
             <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-              <h5 class="m-0">Fases</h5>
+              <h5 class="m-0">Etapas</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -111,7 +111,7 @@
         <Dialog
           v-model:visible="stageDialog"
           :style="{width: '450px'}"
-          header="Detalhes da Fase"
+          header="Detalhes da Etapa"
           :modal="true"
           class="p-fluid"
         >
@@ -140,7 +140,7 @@
             />
           </div>
           <div class="field">
-            <label for="level">Fase</label>
+            <label for="level">Etapa</label>
             <Dropdown
               v-model="selectedLevel"
               :options="levels"
@@ -278,7 +278,7 @@ export default {
           this.$toast.add({
             severity: "success",
             summary: "Tudo certo!",
-            detail: "Fase atualizada",
+            detail: "Etapa atualizada",
             life: 3000
           });
           this.hideDialog();
@@ -294,7 +294,7 @@ export default {
           this.$toast.add({
             severity: "success",
             summary: "Tudo certo!",
-            detail: "Fase criada",
+            detail: "Etapa criada",
             life: 3000
           });
         }
@@ -316,7 +316,7 @@ export default {
       this.$toast.add({
         severity: "success",
         summary: "Sucesso",
-        detail: "Fase Deletada",
+        detail: "Etapa Deletada",
         life: 3000
       });
 
@@ -349,7 +349,7 @@ export default {
       this.$toast.add({
         severity: "success",
         summary: "Successful",
-        detail: "Fases Deletadas",
+        detail: "Etapas Deletadas",
         life: 3000
       });
 
