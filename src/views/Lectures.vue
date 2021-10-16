@@ -82,7 +82,7 @@
               {{slotProps.data.name}}
             </template>
           </Column>
-          <Column
+<!--           <Column
             field="description"
             header="Descrição"
             :sortable="true"
@@ -92,7 +92,7 @@
               {{slotProps.data.description}}
             </template>
           </Column>
-          <Column>
+ -->        <Column>
             <template #body="slotProps">
               <Button
                 icon="pi pi-pencil"
