@@ -6,14 +6,11 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "postinstall": "npm run build",
-    "start": "node server.js"
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "axios": "^0.22.0",
     "core-js": "^3.6.5",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
     "primeflex": "2.0.0",
     "primeicons": "^4.1.0",
     "primevue": "^3.8.0",
