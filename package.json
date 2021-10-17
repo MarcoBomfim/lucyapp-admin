@@ -6,9 +6,11 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "postinstall": "npm run build"
+    "postinstall": "yarn run build",
+    "start": "yarn run serve" 
   },
   "dependencies": {
+    "@auth0/auth0-spa-js": "^1.19.1",
     "axios": "^0.22.0",
     "core-js": "^3.6.5",
     "primeflex": "2.0.0",

@@ -1,4 +1,5 @@
 <template>
+  <div>Must login</div>
   <div
     :class="containerClass"
     @click="onWrapperClick"

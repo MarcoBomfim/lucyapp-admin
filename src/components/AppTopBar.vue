@@ -20,8 +20,8 @@
     </button>
     <ul class="layout-topbar-menu hidden lg:flex origin-top">
       <li>
-        <button class="p-link layout-topbar-button">
-          <i class="pi pi-cog"></i>
+        <button @click="logout" class="p-link layout-topbar-button">
+          <i class="pi pi-sign-out"></i>
           <span>Settings</span>
         </button>
       </li>
@@ -38,6 +38,11 @@ export default {
     },
     onTopbarMenuToggle(event) {
       this.$emit("topbar-menu-toggle", event);
+    },
+    logout() {
+      this.$auth.logout({
+        returnTo: window.location.origin
+      });
     }
   }
 };

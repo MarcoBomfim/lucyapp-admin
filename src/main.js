@@ -9,6 +9,10 @@ import router from "./router";
 import store from "./store";
 import App from './App.vue'
 
+// Import the Auth0 configuration
+// import authConfig from '../auth_config.json'
+import { setupAuth } from './auth'
+
 // Prime Vue stuff
 import PrimeVue from 'primevue/config';
 import Button from 'primevue/button';
@@ -61,4 +65,19 @@ app.component('Toolbar', Toolbar);
 app.directive('ripple', Ripple)
 app.directive('styleclass', StyleClass)
 
-app.mount('#app')
+function callbackRedirect(appState) {
+  router.push(
+    appState && appState.targetUrl
+      ? appState.targetUrl
+      : '/'
+  );
+}
+
+setupAuth({
+  domain: process.env.VUE_APP_AUTH_DOMAIN,
+  client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
+  redirect_uri: process.env.VUE_APP_AUTH_REDIRECT_URI,
+  audience: process.env.VUE_APP_AUTH_AUDIENCE
+}, callbackRedirect).then((auth) => {
+  app.use(auth).mount('#app')
+})

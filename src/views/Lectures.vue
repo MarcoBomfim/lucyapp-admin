@@ -267,12 +267,22 @@ export default {
       lecture: {},
       selectedLectures: null,
       submitted: false,
-      filters: {}
+      filters: {},
+      userToken: null
     };
   },
   async mounted() {
-    const lecturesResponse = await http.get("/lectures");
-    const stagesResponse = await http.get("/stages");
+    this.userToken = await this.$auth.getTokenSilently();
+    const lecturesResponse = await http.get("/lectures", {
+      headers: {
+        'Authorization': `Bearer ${this.userToken}`
+      },
+    });
+    const stagesResponse = await http.get("/stages", {
+      headers: {
+        'Authorization': `Bearer ${this.userToken}`
+      },
+    });
 
     this.lectures = lecturesResponse.data;
     this.stages = stagesResponse.data;
@@ -310,9 +320,17 @@ export default {
           await http.post(`/lectures/${this.lecture._id}`, {
             ...this.lecture,
             stage: this.selectedStage
+          }, {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
           });
 
-          const { data } = await http.get("/lectures");
+          const { data } = await http.get("/lectures", {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
           this.lectures = data;
 
           this.$toast.add({
@@ -326,9 +344,17 @@ export default {
           await http.post(`/lectures`, {
             ...this.lecture,
             stage: this.selectedStage
+          }, {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
           });
 
-          const { data } = await http.get("/lectures");
+          const { data } = await http.get("/lectures", {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
           this.lectures = data;
 
           this.$toast.add({
@@ -351,7 +377,11 @@ export default {
       this.deleteLectureDialog = true;
     },
     async deleteLecture() {
-      await http.delete(`/lectures/${this.lecture._id}`);
+      await http.delete(`/lectures/${this.lecture._id}`, {
+        headers: {
+          'Authorization': `Bearer ${this.userToken}`
+        },
+      });
 
       this.$toast.add({
         severity: "success",
@@ -360,7 +390,11 @@ export default {
         life: 3000
       });
 
-      const { data } = await http.get("/lectures");
+      const { data } = await http.get("/lectures", {
+        headers: {
+          'Authorization': `Bearer ${this.userToken}`
+        },
+      });
 
       this.lectures = data;
       this.lecture = {};
@@ -378,12 +412,20 @@ export default {
       );
 
       this.lecturesToDelete.forEach(async lecture => {
-        await http.delete(`/lectures/${lecture._id}`);
+        await http.delete(`/lectures/${lecture._id}`, {
+          headers: {
+            'Authorization': `Bearer ${this.userToken}`
+          },
+        });
       });
 
       this.deleteLecturesDialog = false;
       this.selectedLectures = null;
-      const { data } = await http.get("/lectures");
+      const { data } = await http.get("/lectures", {
+        headers: {
+          'Authorization': `Bearer ${this.userToken}`
+        },
+      });
       this.lectures = data;
 
       this.$toast.add({

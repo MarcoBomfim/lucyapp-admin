@@ -1,84 +1,55 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import Levels from "../views/Levels.vue";
-import Level from "../views/Level.vue";
-import Stages from "../views/Stages.vue";
-import Stage from "../views/Stage.vue";
-import Exercises from "../views/Exercises.vue";
-import Exercise from "../views/Exercise.vue";
-import Lectures from "../views/Lectures.vue";
-import Lecture from "../views/Lecture.vue";
-import NewLevel from "../views/NewLevel.vue";
-import NewStage from "../views/NewStage.vue";
-import NewExercise from "../views/NewExercise.vue";
-import NewLecture from "../views/NewLecture.vue";
+import Home from "@/views/Home.vue";
+import Levels from "@/views/Levels.vue";
+import Stages from "@/views/Stages.vue";
+import Exercises from "@/views/Exercises.vue";
+import Lectures from "@/views/Lectures.vue";
+import Callback from '@/views/Callback'
+import ErrorPage from '@/views/Error'
+
+import { routeGuard } from '@/auth'
 
 const routes = [
   {
     path: "/",
     name: "Home",
     component: Home,
+    beforeEnter: routeGuard
   },
   {
     path: "/levels",
     name: "Levels",
     component: Levels,
-  },
-  {
-    path: "/levels/:id",
-    name: "Level",
-    component: Level,
-  },
-  {
-    path: "/levels/new",
-    name: "NewLevel",
-    component: NewLevel,
+    beforeEnter: routeGuard
   },
   {
     path: "/stages",
     name: "Stages",
     component: Stages,
-  },
-  {
-    path: "/stages/:id",
-    name: "Stage",
-    component: Stage,
-  },
-  {
-    path: "/stages/new",
-    name: "NewStage",
-    component: NewStage,
+    beforeEnter: routeGuard
   },
   {
     path: "/exercises",
     name: "Exercises",
     component: Exercises,
-  },
-  {
-    path: "/exercises/new",
-    name: "NewExercise",
-    component: NewExercise,
-  },
-  {
-    path: "/exercises/:id",
-    name: "Exercise",
-    component: Exercise,
+    beforeEnter: routeGuard
   },
   {
     path: "/lectures",
     name: "Lectures",
     component: Lectures,
+    beforeEnter: routeGuard
   },
   {
-    path: "/lectures/:id",
-    name: "Lecture",
-    component: Lecture,
+    path: '/callback',
+    name: 'Callback',
+    component: Callback
   },
   {
-    path: "/lectures/new",
-    name: "NewLecture",
-    component: NewLecture,
-  },
+    path: '/error',
+    name: 'Error',
+    component: ErrorPage,
+  }
 ];
 
 const router = createRouter({

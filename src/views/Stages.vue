@@ -243,12 +243,22 @@ export default {
       stage: {},
       selectedStages: null,
       submitted: false,
-      filters: {}
+      filters: {},
+      userToken: null
     };
   },
   async mounted() {
-    const stagesResponse = await http.get("/stages");
-    const levelsResponse = await http.get("/levels");
+    this.userToken = await this.$auth.getTokenSilently(); 
+    const stagesResponse = await http.get("/stages", {
+      headers: {
+        'Authorization': `Bearer ${this.userToken}`
+      },
+    });
+    const levelsResponse = await http.get("/levels", {
+      headers: {
+        'Authorization': `Bearer ${this.userToken}`
+      },
+    });
 
     this.stages = stagesResponse.data;
     this.levels = levelsResponse.data;
@@ -267,12 +277,20 @@ export default {
       this.submitted = true;
       if (this.stage.name.trim()) {
         if (this.stage._id) {
-          await http.post(`/stages/${this.stage._id}`, {
-            ...this.stage,
-            level: this.selectedLevel
+          await http.post(`/stages/${this.stage._id}`, { 
+            ...this.stage, 
+            level: this.selectedLevel 
+          }, {
+            headers: { 
+              'Authorization': `Bearer ${this.userToken  }`
+            }
           });
 
-          const { data } = await http.get("/stages");
+          const { data } = await http.get("/stages", {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
           this.stages = data;
 
           this.$toast.add({
@@ -286,9 +304,17 @@ export default {
           await http.post(`/stages`, {
             ...this.stage,
             level: this.selectedLevel
+          }, {
+            headers: { 
+              'Authorization': `Bearer ${this.userToken  }`
+            }
           });
 
-          const { data } = await http.get("/stages");
+          const { data } = await http.get("/stages", {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
           this.stages = data;
 
           this.$toast.add({
@@ -311,7 +337,11 @@ export default {
       this.deleteStageDialog = true;
     },
     async deleteStage() {
-      await http.delete(`/stages/${this.stage._id}`);
+      await http.delete(`/stages/${this.stage._id}`, {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
 
       this.$toast.add({
         severity: "success",
@@ -320,7 +350,11 @@ export default {
         life: 3000
       });
 
-      const { data } = await http.get("/stages");
+      const { data } = await http.get("/stages", {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
 
       this.stages = data;
       this.stage = {};
@@ -338,12 +372,20 @@ export default {
       );
 
       this.stagesToDelete.forEach(async stage => {
-        await http.delete(`/stages/${stage._id}`);
+        await http.delete(`/stages/${stage._id}`, {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
       });
 
       this.deleteStagesDialog = false;
       this.selectedStages = null;
-      const { data } = await http.get("/stages");
+      const { data } = await http.get("/stages", {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
       this.stages = data;
 
       this.$toast.add({

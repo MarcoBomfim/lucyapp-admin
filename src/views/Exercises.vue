@@ -260,12 +260,22 @@ export default {
       exercise: {},
       selectedExercises: null,
       submitted: false,
-      filters: {}
+      filters: {},
+      userToken: null
     };
   },
   async mounted() {
-    const exercisesResponse = await http.get("/exercises");
-    const stagesResponse = await http.get("/stages");
+    this.userToken = await this.$auth.getTokenSilently();
+    const exercisesResponse = await http.get("/exercises", {
+      headers: {
+        'Authorization': `Bearer ${this.userToken}`
+      },
+    });
+    const stagesResponse = await http.get("/stages", {
+      headers: {
+        'Authorization': `Bearer ${this.userToken}`
+      },
+    });
 
     this.exercises = exercisesResponse.data;
     this.stages = stagesResponse.data;
@@ -303,9 +313,17 @@ export default {
           await http.post(`/exercises/${this.exercise._id}`, {
             ...this.exercise,
             stage: this.selectedStage
+          }, {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
           });
 
-          const { data } = await http.get("/exercises");
+          const { data } = await http.get("/exercises", {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
           this.exercises = data;
 
           this.$toast.add({
@@ -319,9 +337,17 @@ export default {
           await http.post(`/exercises`, {
             ...this.exercise,
             stage: this.selectedStage
+          }, {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
           });
 
-          const { data } = await http.get("/exercises");
+          const { data } = await http.get("/exercises", {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
           this.exercises = data;
 
           this.$toast.add({
@@ -344,7 +370,11 @@ export default {
       this.deleteExerciseDialog = true;
     },
     async deleteExercise() {
-      await http.delete(`/exercises/${this.exercise._id}`);
+      await http.delete(`/exercises/${this.exercise._id}`, {
+        headers: {
+          'Authorization': `Bearer ${this.userToken}`
+        },
+      });
 
       this.$toast.add({
         severity: "success",
@@ -353,7 +383,11 @@ export default {
         life: 3000
       });
 
-      const { data } = await http.get("/exercises");
+      const { data } = await http.get("/exercises", {
+        headers: {
+          'Authorization': `Bearer ${this.userToken}`
+        },
+      });
 
       this.exercises = data;
       this.exercise = {};
@@ -371,12 +405,20 @@ export default {
       );
 
       this.exercisesToDelete.forEach(async exercise => {
-        await http.delete(`/exercises/${exercise._id}`);
+        await http.delete(`/exercises/${exercise._id}`, {
+          headers: {
+            'Authorization': `Bearer ${this.userToken}`
+          },
+        });
       });
 
       this.deleteExercisesDialog = false;
       this.selectedExercises = null;
-      const { data } = await http.get("/exercises");
+      const { data } = await http.get("/exercises", {
+        headers: {
+          'Authorization': `Bearer ${this.userToken}`
+        },
+      });
       this.exercises = data;
 
       this.$toast.add({

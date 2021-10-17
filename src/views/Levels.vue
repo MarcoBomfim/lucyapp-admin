@@ -229,11 +229,17 @@ export default {
       level: {},
       selectedLevels: null,
       submitted: false,
-      filters: {}
+      filters: {},
+      userToken: null,
     };
   },
   async mounted() {
-    const { data } = await http.get("/levels");
+    this.userToken = await this.$auth.getTokenSilently();
+    const { data } = await http.get("/levels", {
+      headers: {
+        'Authorization': `Bearer ${this.userToken}`
+      },
+    });
     this.levels = data;
   },
   methods: {
@@ -252,9 +258,17 @@ export default {
         if (this.level._id) {
           await http.post(`/levels/${this.level._id}`, {
             ...this.level
+          }, {
+            headers: { 
+              'Authorization': `Bearer ${this.userToken  }`
+            }
           });
 
-          const { data } = await http.get("/levels");
+          const { data } = await http.get("/levels", {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
           this.levels = data;
 
           this.$toast.add({
@@ -266,9 +280,17 @@ export default {
         } else {
           await http.post(`/levels`, {
             ...this.level
+          }, {
+            headers: { 
+              'Authorization': `Bearer ${this.userToken  }`
+            }
           });
 
-          const { data } = await http.get("/levels");
+          const { data } = await http.get("/levels", {
+            headers: {
+              'Authorization': `Bearer ${this.userToken}`
+            },
+          });
           this.levels = data;
 
           this.$toast.add({
@@ -291,7 +313,11 @@ export default {
       this.deleteLevelDialog = true;
     },
     async deleteLevel() {
-      await http.delete(`/levels/${this.level._id}`);
+      await http.delete(`/levels/${this.level._id}`, {
+        headers: {
+          'Authorization': `Bearer ${this.userToken}`
+        },
+      });
 
       this.$toast.add({
         severity: "success",
@@ -300,7 +326,11 @@ export default {
         life: 3000
       });
 
-      const { data } = await http.get("/levels");
+      const { data } = await http.get("/levels", {
+        headers: {
+          'Authorization': `Bearer ${this.userToken}`
+        },
+      });
 
       this.levels = data;
       this.level = {};
@@ -317,12 +347,20 @@ export default {
       );
 
       this.levelsToDelete.forEach(async level => {
-        await http.delete(`/levels/${level._id}`);
+        await http.delete(`/levels/${level._id}`, {
+          headers: {
+            'Authorization': `Bearer ${this.userToken}`
+          },
+        });
       });
 
       this.deleteLevelsDialog = false;
       this.selectedLevels = null;
-      const { data } = await http.get("/levels");
+      const { data } = await http.get("/levels", {
+        headers: {
+          'Authorization': `Bearer ${this.userToken}`
+        },
+      });
       this.levels = data;
 
       this.$toast.add({
