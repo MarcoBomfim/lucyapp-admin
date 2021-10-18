@@ -244,14 +244,37 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 import UploadService from '../utils/uploadFilesService';
 import http from "../utils/http-common.js";
 
 export default {
+    setup() {
+    const store = useStore()
+    const exercises = computed(() => store.state.lectures)
+    const stages = computed(() => store.state.stages)
+    const dispatchSetExercises = (exercises) =>  store.dispatch('setExercises', exercises)
+
+    const isAuthenticated = computed(() => store.state.isAuthenticated)
+    const stateUser = computed(() => JSON.parse(store.state.user))
+    const userToken = computed(() => {
+      const currentUser = stateUser.value
+      return currentUser.token
+    })
+
+    return {
+      isAuthenticated,
+      stateUser,
+      exercises,
+      stages,
+      store,
+      userToken,
+      dispatchSetExercises
+    }
+  },
   data() {
     return {
-      exercises: null,
-      levels: null,
       uploading: false,
       selectedStage: null,
       exerciseDialog: false,
@@ -261,24 +284,7 @@ export default {
       selectedExercises: null,
       submitted: false,
       filters: {},
-      userToken: null
     };
-  },
-  async mounted() {
-    this.userToken = await this.$auth.getTokenSilently();
-    const exercisesResponse = await http.get("/exercises", {
-      headers: {
-        'Authorization': `Bearer ${this.userToken}`
-      },
-    });
-    const stagesResponse = await http.get("/stages", {
-      headers: {
-        'Authorization': `Bearer ${this.userToken}`
-      },
-    });
-
-    this.exercises = exercisesResponse.data;
-    this.stages = stagesResponse.data;
   },
   methods: {
     openNew() {
@@ -295,7 +301,7 @@ export default {
         this.uploading = true;
         const file = event.files[0];
 
-        const result = await UploadService.upload(file, file.name);
+        const result = await UploadService.upload(file, file.name, undefined, this.userToken);
         this.$toast.add({severity: 'info', summary: 'Success', detail: `${result.data.s3_key} uploaded to ${result.data.fileLink}`, life: 5000});
 
         // Set image URL to payload
@@ -324,7 +330,7 @@ export default {
               'Authorization': `Bearer ${this.userToken}`
             },
           });
-          this.exercises = data;
+          this.dispatchSetExercises(data);
 
           this.$toast.add({
             severity: "success",
@@ -348,7 +354,7 @@ export default {
               'Authorization': `Bearer ${this.userToken}`
             },
           });
-          this.exercises = data;
+          this.dispatchSetExercises(data);
 
           this.$toast.add({
             severity: "success",
@@ -389,7 +395,7 @@ export default {
         },
       });
 
-      this.exercises = data;
+      this.dispatchSetExercises(data);
       this.exercise = {};
       this.hideDialog();
     },
@@ -419,7 +425,7 @@ export default {
           'Authorization': `Bearer ${this.userToken}`
         },
       });
-      this.exercises = data;
+      this.dispatchSetExercises(data);
 
       this.$toast.add({
         severity: "success",

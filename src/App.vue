@@ -1,5 +1,4 @@
 <template>
-  <div>Must login</div>
   <div
     :class="containerClass"
     @click="onWrapperClick"
@@ -7,6 +6,7 @@
     <AppTopBar @menu-toggle="onMenuToggle" />
 
     <div
+      v-if="isAuthenticated"
       class="layout-sidebar"
       @click="onSidebarClick"
     >
@@ -26,11 +26,59 @@
 </template>
 
 <script>
+import { computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import http from "./utils/http-common.js";
 import AppTopBar from "./components/AppTopBar.vue";
 import AppConfig from "./components/AppConfig.vue"
 import AppMenu from "./components/AppMenu.vue";
 
 export default {
+  setup() {
+    const store = useStore()
+    const isAuthenticated = computed(() => store.state.isAuthenticated)
+    const stateUser = computed(() => JSON.parse(store.state.user))
+    const userToken = computed(() => {
+      const currentUser = stateUser.value
+      return currentUser.token
+    })
+
+    const levels = computed(() => store.state.levels)
+    const stages = computed(() => store.state.stages)
+    const lectures = computed(() => store.state.lectures)
+    const exercises = computed(() => store.state.exercises)
+
+    const dispatchSetLevels = (levels) =>  store.dispatch('setLevels', levels)
+    const dispatchSetStages = (stages) =>  store.dispatch('setStages', stages)
+    const dispatchSetLectures = (lectures) =>  store.dispatch('setLectures', lectures)
+    const dispatchSetExercises = (exercises) =>  store.dispatch('setExercises', exercises)
+
+    onMounted(async () => {
+      const { token } = JSON.parse(store.state.user)
+      const { data: { levels, stages, lectures, exercises } } = await http.post("/search/all", {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      dispatchSetLevels(levels)
+      dispatchSetStages(stages)
+      dispatchSetLectures(lectures)
+      dispatchSetExercises(exercises)
+    })
+ 
+    return {
+      isAuthenticated,
+      stateUser,
+      levels,
+      stages,
+      lectures,
+      exercises,
+      store,
+      userToken,
+      dispatchSetLevels
+    }
+  },
   data() {
     return {
       layoutMode: "static",

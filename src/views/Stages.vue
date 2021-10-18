@@ -230,12 +230,38 @@
 
 <script>
 import http from "../utils/http-common.js";
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
+  setup() {
+    const store = useStore()
+    const stages = computed(() => store.state.stages)
+    const levels = computed(() => store.state.levels)
+    
+    const dispatchSetLevels = (levels) =>  store.dispatch('setLevels', levels)
+    const dispatchSetStages = (stages) =>  store.dispatch('setStages', stages)
+    
+    const isAuthenticated = computed(() => store.state.isAuthenticated)
+    const stateUser = computed(() => JSON.parse(store.state.user))
+    const userToken = computed(() => {
+      const currentUser = stateUser.value
+      return currentUser.token
+    })
+
+    return {
+      isAuthenticated,
+      stateUser,
+      levels,
+      stages,
+      store,
+      userToken,
+      dispatchSetLevels,
+      dispatchSetStages
+    }
+  },
   data() {
     return {
-      stages: null,
-      levels: null,
       selectedLevel: null,
       stageDialog: false,
       deleteStageDialog: false,
@@ -244,24 +270,7 @@ export default {
       selectedStages: null,
       submitted: false,
       filters: {},
-      userToken: null
     };
-  },
-  async mounted() {
-    this.userToken = await this.$auth.getTokenSilently(); 
-    const stagesResponse = await http.get("/stages", {
-      headers: {
-        'Authorization': `Bearer ${this.userToken}`
-      },
-    });
-    const levelsResponse = await http.get("/levels", {
-      headers: {
-        'Authorization': `Bearer ${this.userToken}`
-      },
-    });
-
-    this.stages = stagesResponse.data;
-    this.levels = levelsResponse.data;
   },
   methods: {
     openNew() {
@@ -282,7 +291,7 @@ export default {
             level: this.selectedLevel 
           }, {
             headers: { 
-              'Authorization': `Bearer ${this.userToken  }`
+              'Authorization': `Bearer ${this.userToken}`
             }
           });
 
@@ -291,7 +300,7 @@ export default {
               'Authorization': `Bearer ${this.userToken}`
             },
           });
-          this.stages = data;
+          this.dispatchSetStages(data)
 
           this.$toast.add({
             severity: "success",
@@ -315,7 +324,7 @@ export default {
               'Authorization': `Bearer ${this.userToken}`
             },
           });
-          this.stages = data;
+          this.dispatchSetStages(data)
 
           this.$toast.add({
             severity: "success",
@@ -356,7 +365,7 @@ export default {
             },
           });
 
-      this.stages = data;
+      this.dispatchSetStages(data)
       this.stage = {};
       this.hideDialog();
     },
@@ -386,7 +395,7 @@ export default {
               'Authorization': `Bearer ${this.userToken}`
             },
           });
-      this.stages = data;
+      this.dispatchSetStages(data)
 
       this.$toast.add({
         severity: "success",

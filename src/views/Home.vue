@@ -1,31 +1,25 @@
 <template>
-  <div class="home">
+  <div v-if="isAuthenticated" class="home">
     <h1>LucyApp admin</h1>
-    <h3 v-if="$auth.isAuthenticated" class="is-size-3 has-background-dark welcome">Logado como: {{ userName }}!</h3>
+    <p>Olá {{ stateUser.user.name }}</p>
   </div>
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
   name: "Home",
-  computed: {
-    userName () {
-      // Because of Vue3 reactivity, we need to get the Proxy's value
-      const user = this.$auth.user.value;
-      return user.name;
+  setup() {
+    const store = useStore()
+    const isAuthenticated = computed(() => store.state.isAuthenticated)
+    const stateUser = computed(() => JSON.parse(store.state.user))
+
+    return {
+      isAuthenticated,
+      stateUser
     }
   },
-  methods: {
-    // Log the user in
-    login() {
-      this.$auth.loginWithRedirect();
-    },
-    // Log the user out
-    logout() {
-      this.$auth.logout({
-        returnTo: window.location.origin
-      });
-    }
-  }
 };
 </script>

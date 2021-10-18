@@ -251,14 +251,35 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 import UploadService from '../utils/uploadFilesService';
 import http from "../utils/http-common.js";
 
 export default {
+  setup() {
+    const store = useStore()
+    const lectures = computed(() => store.state.lectures)
+    const dispatchSetLectures = (lectures) =>  store.dispatch('setLectures', lectures)
+
+    const isAuthenticated = computed(() => store.state.isAuthenticated)
+    const stateUser = computed(() => JSON.parse(store.state.user))
+    const userToken = computed(() => {
+      const currentUser = stateUser.value
+      return currentUser.token
+    })
+
+    return {
+      isAuthenticated,
+      stateUser,
+      lectures,
+      store,
+      userToken,
+      dispatchSetLectures
+    }
+  },
   data() {
     return {
-      lectures: null,
-      levels: null,
       uploading: false,
       selectedStage: null,
       lectureDialog: false,
@@ -268,11 +289,10 @@ export default {
       selectedLectures: null,
       submitted: false,
       filters: {},
-      userToken: null
     };
   },
   async mounted() {
-    this.userToken = await this.$auth.getTokenSilently();
+    this.userToken = ''
     const lecturesResponse = await http.get("/lectures", {
       headers: {
         'Authorization': `Bearer ${this.userToken}`
@@ -302,7 +322,7 @@ export default {
         this.uploading = true;
         const file = event.files[0];
 
-        const result = await UploadService.upload(file, file.name);
+        const result = await UploadService.upload(file, file.name, undefined, this.userToken);
         this.$toast.add({severity: 'info', summary: 'Success', detail: `${result.data.s3_key} uploaded to ${result.data.fileLink}`, life: 5000});
 
         // Set video URL to payload
@@ -331,7 +351,7 @@ export default {
               'Authorization': `Bearer ${this.userToken}`
             },
           });
-          this.lectures = data;
+          this.dispatchSetLectures(data);
 
           this.$toast.add({
             severity: "success",
@@ -355,7 +375,7 @@ export default {
               'Authorization': `Bearer ${this.userToken}`
             },
           });
-          this.lectures = data;
+          this.dispatchSetLectures(data);
 
           this.$toast.add({
             severity: "success",
@@ -396,7 +416,7 @@ export default {
         },
       });
 
-      this.lectures = data;
+      this.dispatchSetLectures(data);
       this.lecture = {};
       this.hideDialog();
     },
@@ -426,7 +446,7 @@ export default {
           'Authorization': `Bearer ${this.userToken}`
         },
       });
-      this.lectures = data;
+      this.dispatchSetLectures(data);
 
       this.$toast.add({
         severity: "success",

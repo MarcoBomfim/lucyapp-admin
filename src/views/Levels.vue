@@ -218,11 +218,33 @@
 
 <script>
 import http from "../utils/http-common.js";
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
+  setup() {
+    const store = useStore()
+    const levels = computed(() => store.state.levels)
+    const dispatchSetLevels = (levels) =>  store.dispatch('setLevels', levels)
+
+    const isAuthenticated = computed(() => store.state.isAuthenticated)
+    const stateUser = computed(() => JSON.parse(store.state.user))
+    const userToken = computed(() => {
+      const currentUser = stateUser.value
+      return currentUser.token
+    })
+
+    return {
+      isAuthenticated,
+      stateUser,
+      levels,
+      store,
+      userToken,
+      dispatchSetLevels
+    }
+  },
   data() {
     return {
-      levels: null,
       levelDialog: false,
       deleteLevelDialog: false,
       deleteLevelsDialog: false,
@@ -230,17 +252,7 @@ export default {
       selectedLevels: null,
       submitted: false,
       filters: {},
-      userToken: null,
     };
-  },
-  async mounted() {
-    this.userToken = await this.$auth.getTokenSilently();
-    const { data } = await http.get("/levels", {
-      headers: {
-        'Authorization': `Bearer ${this.userToken}`
-      },
-    });
-    this.levels = data;
   },
   methods: {
     openNew() {
@@ -260,16 +272,19 @@ export default {
             ...this.level
           }, {
             headers: { 
-              'Authorization': `Bearer ${this.userToken  }`
+              'Authorization': `Bearer ${this.userToken}`
             }
           });
 
+          // TODO: Figure out a way of not needing the API call
+          //       to update levels after one is created/deleted
           const { data } = await http.get("/levels", {
             headers: {
               'Authorization': `Bearer ${this.userToken}`
             },
           });
-          this.levels = data;
+
+          this.dispatchSetLevels(data)
 
           this.$toast.add({
             severity: "success",
@@ -291,7 +306,7 @@ export default {
               'Authorization': `Bearer ${this.userToken}`
             },
           });
-          this.levels = data;
+          this.dispatchSetLevels(data)
 
           this.$toast.add({
             severity: "success",
@@ -332,8 +347,9 @@ export default {
         },
       });
 
-      this.levels = data;
+      this.dispatchSetLevels(data)
       this.level = {};
+      this.deleteLevelDialog = false;
     },
     exportCSV() {
       this.$refs.dt.exportCSV();
@@ -361,7 +377,7 @@ export default {
           'Authorization': `Bearer ${this.userToken}`
         },
       });
-      this.levels = data;
+      this.dispatchSetLevels(data)
 
       this.$toast.add({
         severity: "success",

@@ -1,7 +1,7 @@
 import http from "./http-common";
 
 class UploadFilesService {
-  upload(file, name, onUploadProgress) {
+  upload(file, name, onUploadProgress, token) {
     let formData = new FormData();
 
     formData.append("file", file);
@@ -9,6 +9,7 @@ class UploadFilesService {
     return http.post("/admin/upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${token}`
       },
       onUploadProgress,
       data: { name },

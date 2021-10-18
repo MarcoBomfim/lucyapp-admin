@@ -7,12 +7,14 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "postinstall": "yarn run build",
-    "start": "yarn run serve" 
+    "start": "yarn run serve"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.19.1",
     "axios": "^0.22.0",
+    "bcryptjs": "^2.4.3",
     "core-js": "^3.6.5",
+    "lodash": "^4.17.21",
     "primeflex": "2.0.0",
     "primeicons": "^4.1.0",
     "primevue": "^3.8.0",

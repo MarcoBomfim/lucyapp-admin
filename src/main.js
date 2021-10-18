@@ -11,7 +11,7 @@ import App from './App.vue'
 
 // Import the Auth0 configuration
 // import authConfig from '../auth_config.json'
-import { setupAuth } from './auth'
+// import { setupAuth } from './auth'
 
 // Prime Vue stuff
 import PrimeVue from 'primevue/config';
@@ -25,6 +25,7 @@ import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
 import Image from 'primevue/image';
+import Password from 'primevue/password';
 import ProgressBar from 'primevue/progressbar';
 import RadioButton from 'primevue/radiobutton';
 import Rating from 'primevue/rating';
@@ -55,6 +56,7 @@ app.component('InputText', InputText);
 app.component('InputNumber', InputNumber);
 app.component('InputSwitch', InputSwitch);
 app.component('Image', Image);
+app.component('Password', Password);
 app.component('ProgressBar', ProgressBar);
 app.component('RadioButton', RadioButton);
 app.component('Rating', Rating);
@@ -65,19 +67,20 @@ app.component('Toolbar', Toolbar);
 app.directive('ripple', Ripple)
 app.directive('styleclass', StyleClass)
 
-function callbackRedirect(appState) {
-  router.push(
-    appState && appState.targetUrl
-      ? appState.targetUrl
-      : '/'
-  );
-}
+// function callbackRedirect(appState) {
+//   router.push(
+//     appState && appState.targetUrl
+//       ? appState.targetUrl
+//       : '/'
+//   );
+// }
 
-setupAuth({
-  domain: process.env.VUE_APP_AUTH_DOMAIN,
-  client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
-  redirect_uri: process.env.VUE_APP_AUTH_REDIRECT_URI,
-  audience: process.env.VUE_APP_AUTH_AUDIENCE
-}, callbackRedirect).then((auth) => {
-  app.use(auth).mount('#app')
-})
+// setupAuth({
+//   domain: process.env.VUE_APP_AUTH_DOMAIN,
+//   client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
+//   redirect_uri: process.env.VUE_APP_AUTH_REDIRECT_URI,
+//   audience: process.env.VUE_APP_AUTH_AUDIENCE
+// }, callbackRedirect).then((auth) => {
+//   app.use(auth).mount('#app')
+// })
+app.mount('#app')
